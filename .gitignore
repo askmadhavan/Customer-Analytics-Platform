@@ -4,6 +4,7 @@ __pycache__/
 
 # Virtual environment
 venv/
+.venv/
 .env
 
 # Jupyter
@@ -36,6 +37,7 @@ mlflow.db
 
 # Large model files
 *.pkl
+!ml/models/churn_model.pkl
 *.skops
 
 # Python cache

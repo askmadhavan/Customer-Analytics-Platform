@@ -1,8 +1,10 @@
 from pathlib import Path
-
 import joblib
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 MODEL_PATH = Path("/app/ml/models/churn_model.pkl")
+if not MODEL_PATH.exists():
+    MODEL_PATH = BASE_DIR / "ml" / "models" / "churn_model.pkl"
 
 model = None
 
@@ -21,6 +23,13 @@ def predict_churn(features):
 
     model = get_model()
 
-    prediction = model.predict([features])
+    prediction = int(model.predict([features])[0])
+    result = {
+        "prediction": prediction,
+        "churn_prediction": prediction,
+    }
+    if hasattr(model, "predict_proba"):
+        probs = model.predict_proba([features])[0]
+        result["probability"] = round(float(probs[1]), 4)
 
-    return {"prediction": int(prediction[0])}
+    return result
